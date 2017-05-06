@@ -1,6 +1,6 @@
 #pragma once
 
-#pragma pack(push, 1)
+#pragma pack(push, 2)
 
 typedef struct {
 	unsigned short type;                 /* Magic identifier            */
@@ -9,6 +9,7 @@ typedef struct {
 	unsigned short reserved2;
 	unsigned int offset;                 /* Offset to image data, bytes */
 } BITMAP_HEADER;
+#pragma pack(pop)
 
 typedef struct {
 	unsigned int size;               /* Header size in bytes      */
@@ -23,5 +24,3 @@ typedef struct {
 	unsigned int colors;             /* Number of colors         */
 	unsigned int important_colors;   /* Important colors         */
 } BITMAP_INFO_HEADER;
-
-#pragma pack(pop)
