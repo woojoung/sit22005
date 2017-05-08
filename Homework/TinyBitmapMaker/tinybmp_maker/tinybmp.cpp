@@ -9,41 +9,7 @@ TinyBitmap::TinyBitmap()
 
 TinyBitmap::TinyBitmap(const char* _path)
 {
-	std::ifstream fin;
-	fin.open(_path, std::ifstream::binary);
-
-    fin.read((char*)&m_header, sizeof(BITMAP_HEADER));
-	fin.read((char*)&m_info_header, sizeof(BITMAP_INFO_HEADER));
-
-	// File Type Checking
-    if((((m_header.type & 0xFF00) >> 8) != 0x4d) ||
-            ((m_header.type & 0x00FF) != 0x42))
-    {
-        std::cerr << "The given file " << _path << " is not a bmp file. " << std::endl;
-        std::cerr << "Please re-check the given file." << std::endl;
-        exit(1);
-    }
-
-    // Memory Allocation
-    m_image_buf = new char**[m_info_header.height];
-    for(int i = 0; i < m_info_header.height; i++)
-    {
-        m_image_buf[i] = new char*[m_info_header.width];
-        for(int j = 0; j < m_info_header.width; j++)
-        {
-            m_image_buf[i][j] = new char[3];
-        }
-    }
-
-    // File import
-    for(int i = 0; i < m_info_header.height; i++)
-    {
-        for(int j = 0; j < m_info_header.width; j++)
-        {
-            fin.read(m_image_buf[i][j], 3);
-        }
-    }
-	fin.close();
+    import_image(_path);
 }
 
 TinyBitmap::~TinyBitmap()
@@ -87,6 +53,42 @@ void TinyBitmap::print_info_header(std::ostream& strm)
 
 bool TinyBitmap::import_image(const char* _path)
 {
+    std::ifstream fin;
+	fin.open(_path, std::ifstream::binary);
+
+    fin.read((char*)&m_header, sizeof(BITMAP_HEADER));
+	fin.read((char*)&m_info_header, sizeof(BITMAP_INFO_HEADER));
+
+	// File Type Checking
+    if((((m_header.type & 0xFF00) >> 8) != 0x4d) ||
+            ((m_header.type & 0x00FF) != 0x42))
+    {
+        std::cerr << "The given file " << _path << " is not a bmp file. " << std::endl;
+        std::cerr << "Please re-check the given file." << std::endl;
+        return false;
+    }
+
+    // Memory Allocation
+    m_image_buf = new char**[m_info_header.height];
+    for(int i = 0; i < m_info_header.height; i++)
+    {
+        m_image_buf[i] = new char*[m_info_header.width];
+        for(int j = 0; j < m_info_header.width; j++)
+        {
+            m_image_buf[i][j] = new char[3];
+        }
+    }
+
+    // File import
+    for(int i = 0; i < m_info_header.height; i++)
+    {
+        for(int j = 0; j < m_info_header.width; j++)
+        {
+            fin.read(m_image_buf[i][j], 3);
+        }
+    }
+	fin.close();
+
     return true;
 }
 
