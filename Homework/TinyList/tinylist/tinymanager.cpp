@@ -4,13 +4,3 @@
 
 #include "tinymanager.h"
 
-tinymanager::tinymanager()
-:m_pHead(NULL)
-{
-
-}
-
-tinymanager::~tinymanager()
-{
-
-}

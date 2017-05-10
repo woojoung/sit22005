@@ -4,10 +4,5 @@
 
 #include "tinynode.h"
 
-tinynode::tinynode()
-:m_pNext(NULL)
-{
-
-}
 
 
